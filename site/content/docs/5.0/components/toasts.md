@@ -135,9 +135,9 @@ Our toast are dynamically placed according to the position you specified and to 
 
 {{< example >}}
 <form>
-  <div class="form-group">
+  <div class="form-group mb-3">
     <label for="selectToastPlacement">Toast placement</label>
-    <select class="form-control" id="selectToastPlacement">
+    <select class="form-control mt-2" id="selectToastPlacement">
       <option value="top-center">Top center</option>
       <option value="top-left">Top left</option>
       <option value="top-right">Top right</option>
