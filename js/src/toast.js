@@ -291,14 +291,8 @@ class Toast {
   _getMiddleToastPosition() {
     const { width: computedWidthToast } = window.getComputedStyle(this._element)
     const { width: computedWidthContainer } = window.getComputedStyle(this._element.parentNode)
-    const widthContainer = parseInt(
-      computedWidthContainer === 'auto' ? window.innerWidth : computedWidthContainer,
-      10
-    )
-    const widthToast = parseInt(
-      computedWidthToast === 'auto' ? widthContainer : computedWidthToast,
-      10
-    )
+    const widthContainer = parseInt(computedWidthContainer === 'auto' ? window.innerWidth : computedWidthContainer, 10)
+    const widthToast = parseInt(computedWidthToast === 'auto' ? widthContainer : computedWidthToast, 10)
     const middleContainerWidth = widthContainer / 2
     const middleToastWidth = widthToast / 2
 
