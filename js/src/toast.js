@@ -38,14 +38,13 @@ const EVENT_SHOWN = `shown${EVENT_KEY}`
 const CLASS_NAME_FADE = 'fade'
 const CLASS_NAME_SHOW = 'show'
 const CLASS_NAME_SHOWING = 'showing'
-const PositionMap = {
-  TOP_CENTER: 'top-center',
-  TOP_LEFT: 'top-left',
-  TOP_RIGHT: 'top-right',
-  BOTTOM_CENTER: 'bottom-center',
-  BOTTOM_LEFT: 'bottom-left',
-  BOTTOM_RIGHT: 'bottom-right'
-}
+
+const POSITION_TOP_CENTER = 'top-center'
+const POSITION_TOP_LEFT = 'top-left'
+const POSITION_TOP_RIGHT = 'top-right'
+const POSITION_BOTTOM_CENTER = 'bottom-center'
+const POSITION_BOTTOM_LEFT = 'bottom-left'
+const POSITION_BOTTOM_RIGHT = 'bottom-right'
 
 const DefaultType = {
   animation: 'boolean',
@@ -59,7 +58,7 @@ const Default = {
   animation: true,
   autohide: true,
   delay: 5000,
-  position: PositionMap.TOP_RIGHT,
+  position: POSITION_TOP_RIGHT,
   positionMargin: 10
 }
 
@@ -186,6 +185,7 @@ class Toast {
   _positionToast() {
     this._element.style.position = 'absolute'
     const toastList = SelectorEngine.find(`.toast.${this._config.position}`, this._element.parentNode)
+    const styles = {}
 
     if (this._config.position.indexOf('top-') > -1) {
       const top = toastList.reduce((top, toastEl) => {
@@ -195,20 +195,21 @@ class Toast {
         return top
       }, this._config.positionMargin)
 
-      if (this._config.position === PositionMap.TOP_RIGHT) {
-        this._element.classList.add(PositionMap.TOP_RIGHT)
-        this._element.style.right = `${this._config.positionMargin}px`
-      } else if (this._config.position === PositionMap.TOP_LEFT) {
-        this._element.classList.add(PositionMap.TOP_LEFT)
-        this._element.style.left = `${this._config.positionMargin}px`
+      if (this._config.position === POSITION_TOP_RIGHT) {
+        this._element.classList.add(POSITION_TOP_RIGHT)
+        styles.right = `${this._config.positionMargin}px`
+      } else if (this._config.position === POSITION_TOP_LEFT) {
+        this._element.classList.add(POSITION_TOP_LEFT)
+        styles.left = `${this._config.positionMargin}px`
       } else {
         const leftPx = this._getMiddleToastPosition()
 
-        this._element.classList.add(PositionMap.TOP_CENTER)
-        this._element.style.left = `${leftPx}px`
+        this._element.classList.add(POSITION_TOP_CENTER)
+        styles.left = `${leftPx}px`
       }
 
-      this._element.style.top = `${top}px`
+      styles.top = `${top}px`
+      Manipulator.applyCss(this._element, styles)
       return
     }
 
@@ -219,20 +220,21 @@ class Toast {
       return bottom
     }, this._config.positionMargin)
 
-    if (this._config.position === PositionMap.BOTTOM_RIGHT) {
-      this._element.classList.add(PositionMap.BOTTOM_RIGHT)
-      this._element.style.right = `${this._config.positionMargin}px`
-    } else if (this._config.position === PositionMap.BOTTOM_LEFT) {
-      this._element.classList.add(PositionMap.BOTTOM_LEFT)
-      this._element.style.left = `${this._config.positionMargin}px`
+    if (this._config.position === POSITION_BOTTOM_RIGHT) {
+      this._element.classList.add(POSITION_BOTTOM_RIGHT)
+      styles.right = `${this._config.positionMargin}px`
+    } else if (this._config.position === POSITION_BOTTOM_LEFT) {
+      this._element.classList.add(POSITION_BOTTOM_LEFT)
+      styles.left = `${this._config.positionMargin}px`
     } else {
       const leftPx = this._getMiddleToastPosition()
 
-      this._element.classList.add(PositionMap.BOTTOM_CENTER)
-      this._element.style.left = `${leftPx}px`
+      this._element.classList.add(POSITION_BOTTOM_CENTER)
+      styles.left = `${leftPx}px`
     }
 
-    this._element.style.bottom = `${bottom}px`
+    styles.bottom = `${bottom}px`
+    Manipulator.applyCss(this._element, styles)
   }
 
   _repositionExistingToasts() {
@@ -248,7 +250,7 @@ class Toast {
       if (toastInstance.config.position.indexOf('top-') > -1) {
         let top = toastInstance.config.positionMargin
 
-        if (index > 0) {
+        if (index) {
           const previousToast = toastList[index - 1]
           const { height, marginBottom } = window.getComputedStyle(previousToast)
 
@@ -261,7 +263,7 @@ class Toast {
       if (toastInstance.config.position.indexOf('bottom-') > -1) {
         let bottom = toastInstance.config.positionMargin
 
-        if (index > 0) {
+        if (index) {
           const previousToast = toastList[index - 1]
           const { height, marginTop } = window.getComputedStyle(previousToast)
 
@@ -274,18 +276,19 @@ class Toast {
   }
 
   _clearPositioning() {
-    this._element.style.position = ''
-
-    this._element.style.right = ''
-    this._element.style.left = ''
-    this._element.style.bottom = ''
-    this._element.style.top = ''
-    this._element.classList.remove(PositionMap.TOP_RIGHT)
-    this._element.classList.remove(PositionMap.TOP_LEFT)
-    this._element.classList.remove(PositionMap.TOP_CENTER)
-    this._element.classList.remove(PositionMap.BOTTOM_LEFT)
-    this._element.classList.remove(PositionMap.BOTTOM_RIGHT)
-    this._element.classList.remove(PositionMap.BOTTOM_CENTER)
+    Manipulator.applyCss(this._element, {
+      position: '',
+      right: '',
+      left: '',
+      bottom: '',
+      top: ''
+    })
+    this._element.classList.remove(POSITION_TOP_RIGHT)
+    this._element.classList.remove(POSITION_TOP_LEFT)
+    this._element.classList.remove(POSITION_TOP_CENTER)
+    this._element.classList.remove(POSITION_BOTTOM_RIGHT)
+    this._element.classList.remove(POSITION_BOTTOM_LEFT)
+    this._element.classList.remove(POSITION_BOTTOM_CENTER)
   }
 
   _getMiddleToastPosition() {
