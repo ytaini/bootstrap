@@ -183,6 +183,7 @@ class Toast {
   // Private
 
   _positionToast() {
+    this._clearPositioning()
     this._element.style.position = 'absolute'
     const toastList = SelectorEngine.find(`.toast.${this._config.position}`, this._element.parentNode)
     const styles = {}
@@ -283,12 +284,15 @@ class Toast {
       bottom: '',
       top: ''
     })
-    this._element.classList.remove(POSITION_TOP_RIGHT)
-    this._element.classList.remove(POSITION_TOP_LEFT)
-    this._element.classList.remove(POSITION_TOP_CENTER)
-    this._element.classList.remove(POSITION_BOTTOM_RIGHT)
-    this._element.classList.remove(POSITION_BOTTOM_LEFT)
-    this._element.classList.remove(POSITION_BOTTOM_CENTER)
+
+    this._element.classList.remove(
+      POSITION_TOP_RIGHT,
+      POSITION_TOP_LEFT,
+      POSITION_TOP_CENTER,
+      POSITION_BOTTOM_RIGHT,
+      POSITION_BOTTOM_LEFT,
+      POSITION_BOTTOM_CENTER
+    )
   }
 
   _getMiddleToastPosition() {
