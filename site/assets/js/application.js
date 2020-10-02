@@ -57,6 +57,10 @@
   var selectToastPlacement = document.getElementById('selectToastPlacement')
   if (selectToastPlacement) {
     selectToastPlacement.addEventListener('change', function () {
+      if (selectToastPlacement.value.length === 0) {
+        return
+      }
+
       document.querySelectorAll('.toast-placement')
         .forEach(function (toastEl) {
           var toast = bootstrap.Toast.getInstance(toastEl)
